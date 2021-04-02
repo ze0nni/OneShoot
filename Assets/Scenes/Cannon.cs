@@ -7,7 +7,10 @@ public class Cannon : MonoBehaviour
     public float BulletForce = 600;
     public Bullet BulletPrefab;
 
-    [NonSerialized] public int BulletsCount; 
+    [NonSerialized] public int BulletsCount;
+    [NonSerialized] public float Timeout;
+
+    public bool BulletsOut => BulletsCount == 0 && Timeout <= 0;
     
     private float _yaw;
     private float _pitch;
@@ -26,8 +29,15 @@ public class Cannon : MonoBehaviour
             {
                 BulletsCount -= 1;
                 Fire(look * Vector3.forward);
+
+                if (BulletsCount == 0)
+                {
+                    Timeout = 3;
+                }
             }
         }
+        
+        Timeout -= Time.deltaTime;
     }
 
     private void Fire(Vector3 direction)

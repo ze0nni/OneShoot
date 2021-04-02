@@ -34,6 +34,9 @@ public class Boot : MonoBehaviour
         if (_level.IsComplete)
         {
             LoadLevel(_levelIndex + 1);
+        } else if (Cannon.BulletsOut)
+        {
+            LoadLevel(_levelIndex);
         }
     }
 }
