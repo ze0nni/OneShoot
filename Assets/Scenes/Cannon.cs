@@ -1,10 +1,13 @@
 ﻿
+using System;
 using UnityEngine;
 
 public class Cannon : MonoBehaviour
 {
-    public float BulletForce = 1000;
+    public float BulletForce = 600;
     public Bullet BulletPrefab;
+
+    [NonSerialized] public int BulletsCount; 
     
     private float _yaw;
     private float _pitch;
@@ -19,7 +22,11 @@ public class Cannon : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            Fire(look * Vector3.forward);
+            if (BulletsCount > 0)
+            {
+                BulletsCount -= 1;
+                Fire(look * Vector3.forward);
+            }
         }
     }
 
