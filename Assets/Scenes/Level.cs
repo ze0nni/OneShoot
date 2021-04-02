@@ -29,7 +29,6 @@ namespace Scenes
                 trigger.OnBoxesChanged -= TriggerOnOnBoxesChanged;
                 trigger.gameObject.SetActive(false);
             }
-            _triggers.Clear();
             
             SceneManager.UnloadScene(_sceneName);
         }

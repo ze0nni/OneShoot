@@ -14,12 +14,18 @@ public class PlatformTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.GetComponent<Box>() == null)
+            return;
+        
         BoxesCount++;
         OnBoxesChanged?.Invoke();
     }
 
     private void OnTriggerExit(Collider other)
     {
+        if (other.GetComponent<Box>() == null)
+            return;
+        
         BoxesCount--;
         OnBoxesChanged?.Invoke();
     }
