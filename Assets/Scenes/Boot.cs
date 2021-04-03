@@ -16,26 +16,36 @@ public class Boot : MonoBehaviour
     public TextMeshProUGUI MessageText;
     public Color PositiveMessageColor;
     public Color NegativeMessageColor;
+    [Space]
+    public TextMeshProUGUI BulletsCount;
     
     private int _levelIndex;
     private Level _level;
 
-    void Start()
+    void Awake()
     {
+        Cannon.OnBulletsCountChanged += OnBulletsCountChanged;
+        
         LevelsPanel.SetMaxLevels(MaxLevels);
         LoadLevel(1, false);
+    }
+
+    private void OnDestroy()
+    {
+        Cannon.OnBulletsCountChanged -= OnBulletsCountChanged;
     }
 
     void LoadLevel(int levelIndex, bool restart)
     {
         _level?.Dispose();
+        _level = null;
         if (levelIndex > MaxLevels)
         {
             StartCoroutine(ShowMessage("Win", true));
             return;
         }
 
-        Cannon.BulletsCount = levelIndex * 3;
+        Cannon.SetBullets(levelIndex * 3);
         LevelsPanel.SetCurrentLevel(levelIndex);
         
         _levelIndex = levelIndex;
@@ -49,6 +59,11 @@ public class Boot : MonoBehaviour
 
     private void Update()
     {
+        if (_level == null)
+        {
+            return;
+        }
+        
         _level.Update();
         if (_level.IsComplete)
         {
@@ -66,5 +81,11 @@ public class Boot : MonoBehaviour
         MessageText.gameObject.SetActive(true);
         yield return new WaitForSeconds(2);
         MessageText.gameObject.SetActive(false);
+    }
+    
+    
+    private void OnBulletsCountChanged(int count)
+    {
+        BulletsCount.text = $"bullets: {count}";
     }
 }

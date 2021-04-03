@@ -7,10 +7,12 @@ public class Cannon : MonoBehaviour
     public float BulletForce = 600;
     public Bullet BulletPrefab;
 
-    [NonSerialized] public int BulletsCount;
-    [NonSerialized] public float Timeout;
+    public int BulletsCount { get; private set; }
+    public float Timeout;
 
     public bool BulletsOut => BulletsCount == 0 && Timeout <= 0;
+
+    public Action<int> OnBulletsCountChanged;  
     
     private float _yaw;
     private float _pitch;
@@ -28,6 +30,7 @@ public class Cannon : MonoBehaviour
             if (BulletsCount > 0)
             {
                 BulletsCount -= 1;
+                OnBulletsCountChanged?.Invoke(BulletsCount);
                 Fire(look * Vector3.forward);
 
                 if (BulletsCount == 0)
@@ -44,5 +47,11 @@ public class Cannon : MonoBehaviour
     {
         var bullet = Instantiate(BulletPrefab);
         bullet.Rigidbody.AddForce(direction * BulletForce);
+    }
+
+    public void SetBullets(int count)
+    {
+        BulletsCount = count;
+        OnBulletsCountChanged?.Invoke(BulletsCount);
     }
 }
