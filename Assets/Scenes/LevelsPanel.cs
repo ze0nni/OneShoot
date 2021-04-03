@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -36,8 +37,10 @@ public class LevelsPanel : MonoBehaviour
 
    public void SetCurrentLevel(int level)
    {
+      level = Math.Max(level, _maxLevels);
+      
       CurrentLevel.text = level.ToString();
-      NextLevel.text = level <= _maxLevels ? (level + 1).ToString() : "Fin";
+      NextLevel.text = level < _maxLevels ? (level + 1).ToString() : "Fin";
 
       for (var i = 0; i < _items.Count; i++)
       {

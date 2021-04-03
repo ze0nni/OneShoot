@@ -32,7 +32,7 @@ public class Cannon : MonoBehaviour
 
                 if (BulletsCount == 0)
                 {
-                    Timeout = 5;
+                    Timeout = BulletPrefab.LifeTime;
                 }
             }
         }
