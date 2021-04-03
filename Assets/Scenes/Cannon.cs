@@ -6,21 +6,26 @@ public class Cannon : MonoBehaviour
 {
     public float BulletForce = 600;
     public Bullet BulletPrefab;
+    
+    [Space]
+    public bl_Joystick Joystick;
+    public float JoystickScale = 0.1f;
 
     public int BulletsCount { get; private set; }
-    public float Timeout;
 
-    public bool BulletsOut => BulletsCount == 0 && Timeout <= 0;
+    public bool BulletsOut => BulletsCount == 0 && _timeout <= 0;
 
     public Action<int> OnBulletsCountChanged;  
     
     private float _yaw;
     private float _pitch;
+    
+    private float _timeout;
 
     void Update()
     {
-        _yaw = Mathf.Clamp(_yaw + Input.GetAxis("Mouse Y"), 0, 30);
-        _pitch = Mathf.Clamp(_pitch + Input.GetAxis("Mouse X"), -30, 30);
+        _yaw = Mathf.Clamp(_yaw + Joystick.Vertical * JoystickScale, 0, 30);
+        _pitch = Mathf.Clamp(_pitch + Joystick.Horizontal * JoystickScale, -30, 30);
         var look = Quaternion.Euler(0, _pitch, 0) * Quaternion.Euler(-_yaw, 0, 0);
         
         transform.localRotation = look;
@@ -35,12 +40,12 @@ public class Cannon : MonoBehaviour
 
                 if (BulletsCount == 0)
                 {
-                    Timeout = BulletPrefab.LifeTime;
+                    _timeout = BulletPrefab.LifeTime;
                 }
             }
         }
         
-        Timeout -= Time.deltaTime;
+        _timeout -= Time.deltaTime;
     }
 
     private void Fire(Vector3 direction)
