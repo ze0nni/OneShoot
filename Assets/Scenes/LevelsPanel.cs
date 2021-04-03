@@ -37,7 +37,7 @@ public class LevelsPanel : MonoBehaviour
 
    public void SetCurrentLevel(int level)
    {
-      level = Math.Max(level, _maxLevels);
+      level = Math.Min(level, _maxLevels + 1);
       
       CurrentLevel.text = level.ToString();
       NextLevel.text = level < _maxLevels ? (level + 1).ToString() : "Fin";
