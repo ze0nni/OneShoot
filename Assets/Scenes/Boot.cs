@@ -7,13 +7,17 @@ using UnityEngine.SceneManagement;
 
 public class Boot : MonoBehaviour
 {
+    private const int MaxLevels = 4;
+    
     public Cannon Cannon;
+    public LevelsPanel LevelsPanel;
 
     private int _levelIndex;
     private Level _level;
 
     void Start()
     {
+        LevelsPanel.SetMaxLevels(MaxLevels);
         LoadLevel(1);
     }
 
@@ -21,7 +25,9 @@ public class Boot : MonoBehaviour
     {
         _level?.Dispose();
 
-        Cannon.BulletsCount = levelIndex * 5;
+        Cannon.BulletsCount = levelIndex * 3;
+        LevelsPanel.SetCurrentLevel(levelIndex);
+        
         _levelIndex = levelIndex;
         _level = new Level(levelIndex);
     }
